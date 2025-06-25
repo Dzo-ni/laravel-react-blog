@@ -13,6 +13,8 @@ Route::resource('posts', PostController::class)->middleware('auth');
 // routes/web.php
 Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
 
+Route::resource('categories', CategoryController::class)->middleware('auth');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
