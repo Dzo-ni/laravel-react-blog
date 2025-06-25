@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class PostController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $posts = Post::with('user')->latest()->get();
-        return view('posts.index', compact('posts'));
+        //
     }
 
     /**
@@ -22,26 +19,25 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string',
+            'content' => 'required|string',
         ]);
 
-        Post::create([
-            'title' => $validated['title'],
-            'body' => $validated['body'],
+        Comment::create([
+            'content' => $validated['content'],
+            'post_id' => $post->id,
             'user_id' => Auth::id(),
         ]);
 
-        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+        return redirect()->route('posts.show', $post->id)->with('success', 'Comment added.');
     }
 
     /**
@@ -49,8 +45,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::with('user', 'comments')->findOrFail($id);
-        return view('posts.show', compact('post'));
+        //
     }
 
     /**
