@@ -8,6 +8,7 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+Route::get('/search', [PostController::class, 'search'])->name('search.posts');
 Route::resource('posts', PostController::class)->middleware('auth');
 
 // routes/web.php

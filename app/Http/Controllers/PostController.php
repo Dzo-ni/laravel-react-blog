@@ -8,6 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $posts = Post::query()
+            ->when($query, function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('body', 'like', "%{$query}%");
+            })
+            ->with('user')
+            ->latest()
+            ->get();
+
+        return view('posts.index', compact('posts', 'query'));
+    }
+
     /**
      * Display a listing of the resource.
      */
